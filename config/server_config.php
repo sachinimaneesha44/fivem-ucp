@@ -1,18 +1,9 @@
 <?php
 class ServerConfig {
     // FiveM Server Configuration
-    const FIVEM_SERVER_IP = '127.0.0.1';  // Change to your server IP
-    const FIVEM_SERVER_PORT = 30120;      // Change to your server port
+    const FIVEM_SERVER_IP = '127.0.0.1';
+    const FIVEM_SERVER_PORT = 30120;
     const MAX_PLAYERS = 64;
-    
-    // Server API endpoints
-    const API_INFO_ENDPOINT = '/info.json';
-    const API_DYNAMIC_ENDPOINT = '/dynamic.json';
-    const API_PLAYERS_ENDPOINT = '/players.json';
-    
-    // Reboot schedule
-    const DAILY_REBOOT_TIME = '06:00';
-    const SERVER_TIMEZONE = 'America/New_York';
     
     // Discord Integration
     const DISCORD_WEBHOOK_URL = ''; // Add your Discord webhook URL here
@@ -32,47 +23,26 @@ class ServerConfig {
     const DISK_WARNING_THRESHOLD = 90;
     
     public static function getFiveMServerStatus() {
-        $api_base = 'http://' . self::FIVEM_SERVER_IP . ':' . self::FIVEM_SERVER_PORT;
+        $server_ip = self::FIVEM_SERVER_IP;
+        $server_port = self::FIVEM_SERVER_PORT;
         
-        try {
-            // Fetch server info
-            $info_url = $api_base . self::API_INFO_ENDPOINT;
-            $dynamic_url = $api_base . self::API_DYNAMIC_ENDPOINT;
-            
-            $info_data = @file_get_contents($info_url, false, stream_context_create([
-                'http' => ['timeout' => 5]
-            ]));
-            
-            $dynamic_data = @file_get_contents($dynamic_url, false, stream_context_create([
-                'http' => ['timeout' => 5]
-            ]));
-            
-            if ($info_data && $dynamic_data) {
-                $info = json_decode($info_data, true);
-                $dynamic = json_decode($dynamic_data, true);
-                
-                return [
-                    'online' => true,
-                    'info' => $info,
-                    'dynamic' => $dynamic,
-                    'api_base' => $api_base
-                ];
-            }
-        } catch (Exception $e) {
-            // Server unreachable
+        // Try to connect to FiveM server
+        $connection = @fsockopen($server_ip, $server_port, $errno, $errstr, 5);
+        
+        if ($connection) {
+            fclose($connection);
+            return [
+                'online' => true,
+                'ip' => $server_ip,
+                'port' => $server_port
+            ];
         }
         
-        // Try basic connection test as fallback
-        $connection = @fsockopen(self::FIVEM_SERVER_IP, self::FIVEM_SERVER_PORT, $errno, $errstr, 3);
-        $basic_online = (bool)$connection;
-        if ($connection) fclose($connection);
-        
         return [
-            'online' => $basic_online,
-            'info' => null,
-            'dynamic' => null,
-            'api_base' => 'http://' . self::FIVEM_SERVER_IP . ':' . self::FIVEM_SERVER_PORT,
-            'error' => $basic_online ? 'API endpoints unavailable' : $errstr
+            'online' => false,
+            'ip' => $server_ip,
+            'port' => $server_port,
+            'error' => $errstr
         ];
     }
     
