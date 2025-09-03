@@ -132,42 +132,9 @@ include 'includes/navbar.php';
     
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Server Status Banner -->
-        <div class="mb-8 rounded-2xl border p-6 theme-transition shadow-xl relative overflow-hidden" 
-             :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'">
-            <div class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-blue-500/10"></div>
-            <div class="relative flex flex-col md:flex-row items-center justify-between">
-                <div class="flex items-center mb-4 md:mb-0">
-                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl flex items-center justify-center mr-6 shadow-lg">
-                        <i class="fas fa-server text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-bold theme-transition" :class="darkMode ? 'text-white' : 'text-gray-900'">Server Status</h2>
-                        <div class="flex items-center mt-1">
-                            <div class="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-                            <span class="text-green-500 font-semibold">Online & Operational</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div class="text-center">
-                        <p class="text-2xl font-bold text-blue-500" data-player-count>0/64</p>
-                        <p class="text-xs theme-transition" :class="darkMode ? 'text-gray-400' : 'text-gray-600'">Players</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-2xl font-bold text-green-500" data-cpu-usage>25%</p>
-                        <p class="text-xs theme-transition" :class="darkMode ? 'text-gray-400' : 'text-gray-600'">CPU</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-2xl font-bold text-purple-500" data-memory-usage>45%</p>
-                        <p class="text-xs theme-transition" :class="darkMode ? 'text-gray-400' : 'text-gray-600'">Memory</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-2xl font-bold text-yellow-500">35ms</p>
-                        <p class="text-xs theme-transition" :class="darkMode ? 'text-gray-400' : 'text-gray-600'">Ping</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Enhanced FiveM Server Status Card -->
+        <div class="mb-8">
+            <?php include 'components/server-status-card.php'; ?>
         </div>
         
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
